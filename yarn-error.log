@@ -1,0 +1,36 @@
+Arguments: 
+  /usr/local/Cellar/node/12.1.0/bin/node /usr/local/Cellar/yarn/1.16.0/libexec/bin/yarn.js add openzeppelin
+
+PATH: 
+  /Library/Frameworks/Python.framework/Versions/3.5/bin:/Users/richardkuo/.rvm/gems/ruby-2.5.3/bin:/Users/richardkuo/.rvm/gems/ruby-2.5.3@global/bin:/Users/richardkuo/.rvm/rubies/ruby-2.5.3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/richardkuo/.rvm/bin:/Users/richardkuo/Library/Android/sdk/tools:/Users/richardkuo/Library/Android/sdk/platform-tools
+
+Yarn version: 
+  1.16.0
+
+Node version: 
+  12.1.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/openzeppelin: Not found
+      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.16.0/libexec/lib/cli.js:66091:18)
+      at Request.self.callback (/usr/local/Cellar/yarn/1.16.0/libexec/lib/cli.js:129590:22)
+      at Request.emit (events.js:196:13)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.16.0/libexec/lib/cli.js:130562:10)
+      at Request.emit (events.js:196:13)
+      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.16.0/libexec/lib/cli.js:130484:12)
+      at Object.onceWrapper (events.js:284:20)
+      at IncomingMessage.emit (events.js:201:15)
+      at endReadableNT (_stream_readable.js:1130:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:17)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
