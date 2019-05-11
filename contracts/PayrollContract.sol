@@ -31,7 +31,7 @@ contract PayrollContract {
     balanceOf[msg.sender] += amount;
   }
 
-  function createEmployee(address payable _employee_address, uint _hourly_rate) external {
+  function createEmployee(address payable _employee_address, uint _hourly_rate) public {
     // we don't need to pass in employee_id as an argument to the mint function because of the line below:
     employee_id++;
 
@@ -47,12 +47,14 @@ contract PayrollContract {
     employees[employee_id] = employee;
   }
 
-  function createNewPayroll() public {
+  function createNewPayroll() public returns(uint) {
     payroll_id++;
 
     currentPayroll.length = 0;
 
     payrolls[payroll_id] = currentPayroll;
+
+    return payroll_id;
   }
 
   function getCurrentPayroll() public view returns(uint) {

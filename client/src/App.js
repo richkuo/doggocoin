@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import PayrollContract from "./contracts/PayrollContract.json";
 import getWeb3 from "./utils/getWeb3";
 
 import "./App.css";
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  state = { currentPayrollId: 999999999, web3: null, accounts: null, contract: null };
 
   componentDidMount = async () => {
     try {
@@ -17,15 +17,15 @@ class App extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
+      const deployedNetwork = PayrollContract.networks[networkId];
       const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
+        PayrollContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
+      this.setState({ web3, accounts, contract: instance }, this.createPayroll);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -35,18 +35,41 @@ class App extends Component {
     }
   };
 
-  runExample = async () => {
+  getCurrentPayrollId = async () => {
     const { accounts, contract } = this.state;
 
-    // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
+    // Get the value from the contract to prove it worked.
+    const response = await contract.methods.getCurrentPayroll().call();
+    console.log(response.toNumber());
+  };
+
+  createPayroll = async () => {
+    const { accounts, contract } = this.state;
+
+    var params = {
+      gas: 40000,
+      from: accounts[0]
+      // value: this.state.web3.utils.toWei('1', 'ether')
+      // value: 1
+    };
+
+    console.log(params)
+
+    // await contract.methods.deposit(params).send({ from: accounts[0] });
+    await contract.methods.deposit(1).send(params);
+    const response = await contract.methods.createNewPayroll().call();
 
     // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
+    console.log(response.toNumber());
 
-    // Update state with the result.
-    this.setState({ storageValue: response });
+    this.setState({ currentPayrollId: response.toNumber() });
   };
+
+  createEmployee = async() => {
+    const { accounts, contract } = this.state;
+
+    await contract.methods.addEmployeeToPayroll;
+  }
 
   render() {
     if (!this.state.web3) {
@@ -64,7 +87,7 @@ class App extends Component {
         <p>
           Try changing the value stored on <strong>line 40</strong> of App.js.
         </p>
-        <div>The stored value is: {this.state.storageValue}</div>
+        <div>Current Payroll number: {this.state.currentPayrollId}</div>
       </div>
     );
   }
