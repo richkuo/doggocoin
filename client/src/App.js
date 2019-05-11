@@ -47,22 +47,22 @@ class App extends Component {
     const { accounts, contract } = this.state;
 
     var params = {
-      gas: 40000,
-      from: accounts[0]
-      // value: this.state.web3.utils.toWei('1', 'ether')
+      // gas: 40000,
+      from: accounts[0],
+      value: this.state.web3.utils.toWei('1', 'ether')
       // value: 1
     };
 
-    console.log(params)
-
-    // await contract.methods.deposit(params).send({ from: accounts[0] });
-    await contract.methods.deposit(1).send(params);
-    const response = await contract.methods.createNewPayroll().call();
+    await contract.methods.deposit().send(params);
+    // const response = await contract.methods.createNewPayroll().call();
+    // console.log(response)
+    const res = await contract.methods.balanceOf(accounts[0]);
+    console.log(res.toNumber())
 
     // Get the value from the contract to prove it worked.
-    console.log(response.toNumber());
+    // console.log(response.toNumber());
 
-    this.setState({ currentPayrollId: response.toNumber() });
+    // this.setState({ currentPayrollId: response.toNumber() });
   };
 
   createEmployee = async() => {
