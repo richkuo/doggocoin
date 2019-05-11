@@ -26,9 +26,10 @@ contract PayrollContract {
   mapping (uint => Payroll[]) public payrolls;
   mapping (address => uint256) public balanceOf;
 
-  function deposit(uint256 amount) public payable {
-    require(msg.value == amount);
-    balanceOf[msg.sender] += amount;
+  function deposit() public payable {
+    // require > 0 
+    // require(msg.value == amount);
+    balanceOf[msg.sender] += msg.value;
   }
 
   function createEmployee(address payable _employee_address, uint _hourly_rate) public {

@@ -1,15 +1,14 @@
-const SimpleStorage = artifacts.require("./SimpleStorage.sol");
+const PayrollContract = artifacts.require("./PayrollContract.sol");
 
-contract("SimpleStorage", accounts => {
-  it("...should store the value 89.", async () => {
-    const simpleStorageInstance = await SimpleStorage.deployed();
+contract("PayrollContract", accounts => {
+  it("...deposit.", async () => {
+    const PayrollContractInstance = await PayrollContract.deployed();
 
-    // Set value of 89
-    await simpleStorageInstance.set(89, { from: accounts[0] });
+    await PayrollContractInstance.deposit({ from: accounts[0], value: web3.utils.toWei("1", 'ether') })
 
-    // Get stored value
-    const storedData = await simpleStorageInstance.get.call();
+    const res = await PayrollContractInstance.balanceOf(accounts[0], { from: accounts[0] })
+    const balance = web3.utils.fromWei(res, 'ether');
 
-    assert.equal(storedData, 89, "The value 89 was not stored.");
+    assert.equal(balance, "1", "deposited value not equal to balance");
   });
 });
