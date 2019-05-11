@@ -53,11 +53,11 @@ class App extends Component {
       // value: 1
     };
 
-    await contract.methods.deposit().send(params);
+    // await contract.methods.deposit().send(params);
     // const response = await contract.methods.createNewPayroll().call();
-    // console.log(response)
-    const res = await contract.methods.balanceOf(accounts[0]);
-    console.log(res.toNumber())
+    const res = await contract.methods.balanceOf(accounts[0]).call();
+    const balance = this.state.web3.utils.fromWei(res._hex)
+    console.log(balance)
 
     // Get the value from the contract to prove it worked.
     // console.log(response.toNumber());
