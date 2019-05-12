@@ -72,9 +72,17 @@ class App extends Component {
 
     // check balance is kosher
     const payroll_id = await contract.methods.payroll_id().call();
+    console.log(`payroll_id: ${payroll_id}`)
 
     const payroll = await contract.methods.payrolls(2).call();
     console.log(`payroll: ${payroll}`)
+  }
+
+  currentPayrollCount =  async() => {
+    const { accounts, contract } = this.state;
+
+    const payroll_length = await contract.methods.currentPayrollCount().call();
+    console.log(`payroll_length: ${payroll_length}`)
   }
 
   checkEmployee = async() => {
@@ -130,6 +138,14 @@ class App extends Component {
     console.log(`payment: ${payment}`)
   }
 
+  payLastEmployeeOne = async() => {
+    console.log('payLastEmployeeOne')
+    const { accounts, contract } = this.state;
+
+    const payment = await contract.methods.payLastEmployeeOne().call();
+    console.log(`payment: ${payment}`)
+  }
+
   runPayroll = async() => {
     console.log('runPayroll')
     const { accounts, contract } = this.state;
@@ -150,8 +166,8 @@ class App extends Component {
         </div>
 
         <div>
-          <button onClick={() => this.createEmployee('0xf104cb0b57ee274838f43399f2ede8cc8e428560', 2, 'jeff')}>
-            Create Employee 1
+          <button onClick={() => this.createEmployee('0xf104cB0b57EE274838F43399F2EDE8CC8e428560', 2, 'eff')}>
+            Create Employee 0xf104cB0b57EE274838F43399F2EDE8CC8e428560
           </button>
         </div>
 
@@ -174,8 +190,20 @@ class App extends Component {
         </div>
 
         <div>
-          <button onClick={() => this.checkPayroll()}>
-            Check Payroll
+          <button onClick={() => this.getCurrentPayrollId()}>
+            Check Payroll Id
+          </button>
+        </div>
+
+        <div>
+          <button onClick={() => this.currentPayrollCount()}>
+            Get Current Payroll Length
+          </button>
+        </div>
+
+        <div>
+          <button onClick={() => this.payLastEmployeeOne()}>
+            Pay Last Employee 1
           </button>
         </div>
 

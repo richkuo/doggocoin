@@ -75,6 +75,10 @@ contract PayrollContract {
     return payroll_id;
   }
 
+  function getCurrentPayrollLength() public view returns(uint) {
+    return currentPayroll.length;
+  }
+
   function addEmployeeToPayroll(uint _employee_id, uint _hours_worked) public {
     Payroll memory newEmployeePayroll = Payroll({
       employee_id: _employee_id,
@@ -94,19 +98,31 @@ contract PayrollContract {
     }
   }
 
-  function checkLastEmployeePayment() public returns(uint) {
+  function checkLastEmployeePayment() public returns(address) {
     uint256 payment;
+    address payable employee_address;
     payrolls[payroll_id] = currentPayroll;
 
     uint arrayLength = currentPayroll.length;
 
     for (uint i=0; i<arrayLength; i++) {
-      address payable employee_address;
-
       payment = employees[currentPayroll[i].employee_id].hourly_rate*currentPayroll[i].hours_worked;
+      employee_address = employees[currentPayroll[i].employee_id].public_address;
     }
 
-    return payment;
+    // return payment;
+    return employee_address;
+  }
+
+  function payLastEmployeeOne() public returns(bool) {
+    address payable employee_address;
+    payrolls[payroll_id] = currentPayroll;
+
+    uint arrayLength = currentPayroll.length;
+
+    employee_address = employees[currentPayroll[arrayLength].employee_id].public_address;
+    balanceOf[msg.sender] -= 1;
+    return employee_address.send(1);
   }
 
   function runPayroll() public {
@@ -128,6 +144,6 @@ contract PayrollContract {
       balanceOf[msg.sender] -= payment;
     }
 
-    createNewPayroll();
+    // createNewPayroll();
   }
 }
