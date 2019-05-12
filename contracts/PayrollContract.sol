@@ -11,6 +11,7 @@ contract PayrollContract {
 
   struct Employee {
     uint256 employee_id;
+    string name;
     address payable public_address;
     uint256 hourly_rate;
     uint256 time_created;
@@ -37,18 +38,18 @@ contract PayrollContract {
     balanceOf[msg.sender] += msg.value;
   }
 
-  function currentPayrollCount () public returns(uint256) {
+  function currentPayrollCount() public view returns(uint256) {
     return currentPayroll.length;
   }
   
-
-  function createEmployee(address payable _employee_address, uint _hourly_rate) public returns(uint) {
+  function createEmployee(address payable _employee_address, uint _hourly_rate, string memory _name) public returns(uint) {
     // we don't need to pass in employee_id as an argument to the mint function because of the line below:
     employee_id++;
 
     uint time_created = now;
 
     Employee memory employee = Employee({
+      name: _name,
       employee_id: employee_id,
       public_address: _employee_address,
       hourly_rate: _hourly_rate,

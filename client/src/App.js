@@ -47,57 +47,63 @@ class App extends Component {
     const { accounts, contract } = this.state;
 
     // // initial deposit
-    // await contract.methods.deposit().send({
-    //   from: accounts[0],
-    //   value: this.state.web3.utils.toWei('1', 'ether')
-    // });
+    await contract.methods.deposit().send({
+      from: accounts[0],
+      value: this.state.web3.utils.toWei('10', 'ether')
+    });
     
     // // check balance is kosher
-    // const res = await contract.methods.balanceOf(accounts[0]).call();
-    // const balance = this.state.web3.utils.fromWei(res._hex)
-    // console.log(`balance: ${balance}`)
+    const res = await contract.methods.balanceOf(accounts[0]).call();
+    const balance = this.state.web3.utils.fromWei(res._hex)
+    console.log(`balance: ${balance}`)
     
-    // // Create payrool,, check its lit 
-    // const response = await contract.methods.createNewPayroll().call();
-    // const payrollId = response.toNumber()
-    // console.log(`payrollId: ${payrollId}`)
+    // Create payrool,, check its lit 
+    const response = await contract.methods.createNewPayroll().call();
+    const payrollId = response.toNumber()
+    console.log(`payrollId: ${payrollId}`)
     
-    this.createEmployee('0xf104cb0b57ee274838f43399f2ede8cc8e428560', 2)
-
-    // this.addEmployeeToPayroll(1, 11)
-    // this.addEmployeeToPayroll(1, 12)
+    this.createEmployee('0xf104cb0b57ee274838f43399f2ede8cc8e428560', 2, 'jeff')
   }
 
-  createEmployee = async(employeeAddress, hourlyRate) => {
+  createEmployee = async(employeeAddress, hourlyRate, name) => {
+    console.log('createEmployee')
     const { accounts, contract } = this.state;
-    // function createEmployee(address payable _employee_address, uint _hourly_rate) public {
 
-    // await contract.methods.createEmployee('0xf104cb0b57ee274838f43399f2ede8cc8e428560', 2);
-    const res1 = await contract.methods.createEmployee(employeeAddress, hourlyRate).send({
+    const res1 = await contract.methods.createEmployee(employeeAddress, hourlyRate, name).send({
       from: accounts[0]
     });
-    console.log(1)
-    
+    console.log(res1)
+    console.log('res1')
     const res = await contract.methods.employees(1).call()
     console.log(res)
-    
+    console.log('end')
   }
 
   addEmployeeToPayroll = async(employeeId, hoursWorked) => {
+    console.log('addEmployeeToPayroll')
     const { accounts, contract } = this.state;
     // function addEmployeeToPayroll(uint _employee_id, uint _hours_worked) public {
 
-    await contract.methods.addEmployeeToPayroll(employeeId, hoursWorked)
+    const res = await contract.methods.addEmployeeToPayroll(employeeId, hoursWorked).send({
+      from: accounts[0]
+    });
+
+    console.log('res')
+    console.log(res)
   }
 
   updateHoursWorked = async(employeeId, hoursWorked) => {
+    console.log('updateHoursWorked')
     const { accounts, contract } = this.state;
     // function updateHoursWorked(uint _employee_id, uint _hours_worked) public {
 
-    await contract.methods.updateHoursWorked(employeeId, hoursWorked)
+    await contract.methods.updateHoursWorked(employeeId, hoursWorked).send({
+      from: accounts[0]
+    });
   }
 
   runPayroll = async() => {
+    console.log('runPayroll')
     const { accounts, contract } = this.state;
 
     await contract.methods.runPayroll()
@@ -109,20 +115,22 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
-        <p>
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
-        </p>
-        <p>
-          Try changing the value stored on <strong>line 40</strong> of App.js.
-        </p>
+         <div>
+          <button
+            onClick={() => this.addEmployeeToPayroll(1, 2)}
+          >
+            Add Employee 1 to payroll
+          </button>
+        </div>
+
         <div>Current Payroll number: {this.state.currentPayrollId}</div>
 
         <div>
-          <button>Run Payroll</button>
+          <button
+            onClick={() => this.runPayroll()}
+          >
+            Run Payroll
+          </button>
         </div>
       </div>
     );
