@@ -49,20 +49,40 @@ class App extends Component {
     // // initial deposit
     await contract.methods.deposit().send({
       from: accounts[0],
-      value: this.state.web3.utils.toWei('10', 'ether')
+      value: this.state.web3.utils.toWei('2', 'ether')
     });
-    
-    // // check balance is kosher
-    const res = await contract.methods.balanceOf(accounts[0]).call();
-    const balance = this.state.web3.utils.fromWei(res._hex)
-    console.log(`balance: ${balance}`)
     
     // Create payrool,, check its lit 
     const response = await contract.methods.createNewPayroll().call();
     const payrollId = response.toNumber()
     console.log(`payrollId: ${payrollId}`)
-    
-    this.createEmployee('0xf104cb0b57ee274838f43399f2ede8cc8e428560', 2, 'jeff')
+  }
+
+  checkBalance = async() => {
+    const { accounts, contract } = this.state;
+
+    // check balance is kosher
+    const res = await contract.methods.balanceOf(accounts[0]).call();
+    const balance = this.state.web3.utils.fromWei(res._hex)
+    console.log(`balance: ${balance}`)
+  }
+
+  checkPayroll = async() => {
+    const { accounts, contract } = this.state;
+
+    // check balance is kosher
+    const payroll_id = await contract.methods.payroll_id().call();
+
+    const payroll = await contract.methods.payrolls(2).call();
+    console.log(`payroll: ${payroll}`)
+  }
+
+  checkEmployee = async() => {
+    const { accounts, contract } = this.state;
+
+    // check balance is kosher
+    const employee = await contract.methods.employees(1).call();
+    console.log(`employee: ${employee.name}`)
   }
 
   createEmployee = async(employeeAddress, hourlyRate, name) => {
@@ -102,11 +122,19 @@ class App extends Component {
     });
   }
 
+  checkLastEmployeePayment = async() => {
+    console.log('checkLastEmployeePayment')
+    const { accounts, contract } = this.state;
+
+    const payment = await contract.methods.checkLastEmployeePayment().call();
+    console.log(`payment: ${payment}`)
+  }
+
   runPayroll = async() => {
     console.log('runPayroll')
     const { accounts, contract } = this.state;
 
-    await contract.methods.runPayroll()
+    await contract.methods.runPayroll().call()
   }
 
   render() {
@@ -115,20 +143,44 @@ class App extends Component {
     }
     return (
       <div className="App">
-         <div>
-          <button
-            onClick={() => this.addEmployeeToPayroll(1, 2)}
-          >
+        <div>
+          <button onClick={() => this.checkBalance()}>
+            Check Balance
+          </button>
+        </div>
+
+        <div>
+          <button onClick={() => this.createEmployee('0xf104cb0b57ee274838f43399f2ede8cc8e428560', 2, 'jeff')}>
+            Create Employee 1
+          </button>
+        </div>
+
+        <div>
+          <button onClick={() => this.checkEmployee()}>
+            Check Employees
+          </button>
+        </div>
+
+        <div>
+          <button onClick={() => this.addEmployeeToPayroll(1, 2)}>
             Add Employee 1 to payroll
           </button>
         </div>
 
-        <div>Current Payroll number: {this.state.currentPayrollId}</div>
+        <div>
+          <button onClick={() => this.checkLastEmployeePayment()}>
+            Check Last Employee Payment
+          </button>
+        </div>
 
         <div>
-          <button
-            onClick={() => this.runPayroll()}
-          >
+          <button onClick={() => this.checkPayroll()}>
+            Check Payroll
+          </button>
+        </div>
+
+        <div>
+          <button onClick={() => this.runPayroll()}>
             Run Payroll
           </button>
         </div>

@@ -94,6 +94,21 @@ contract PayrollContract {
     }
   }
 
+  function checkLastEmployeePayment() public returns(uint) {
+    uint256 payment;
+    payrolls[payroll_id] = currentPayroll;
+
+    uint arrayLength = currentPayroll.length;
+
+    for (uint i=0; i<arrayLength; i++) {
+      address payable employee_address;
+
+      payment = employees[currentPayroll[i].employee_id].hourly_rate*currentPayroll[i].hours_worked;
+    }
+
+    return payment;
+  }
+
   function runPayroll() public {
     // set current payroll
     payrolls[payroll_id] = currentPayroll;
