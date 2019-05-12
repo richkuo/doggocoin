@@ -63,12 +63,38 @@ class App extends Component {
     // console.log(response.toNumber());
 
     // this.setState({ currentPayrollId: response.toNumber() });
-  };
 
-  createEmployee = async() => {
+    this.createEmployee('0xf104cb0b57ee274838f43399f2ede8cc8e428560', 2)
+    this.addEmployeeToPayroll(1, 11)
+    this.addEmployeeToPayroll(1, 12)
+  }
+
+  createEmployee = async(employeeAddress, hourlyRate) => {
+    const { accounts, contract } = this.state;
+    // function createEmployee(address payable _employee_address, uint _hourly_rate) public {
+
+    // await contract.methods.createEmployee('0xf104cb0b57ee274838f43399f2ede8cc8e428560', 2);
+    await contract.methods.createEmployee(employeeAddress, hourlyRate);
+  }
+
+  addEmployeeToPayroll = async(employeeId, hoursWorked) => {
+    const { accounts, contract } = this.state;
+    // function addEmployeeToPayroll(uint _employee_id, uint _hours_worked) public {
+
+    await contract.methods.addEmployeeToPayroll(employeeId, hoursWorked)
+  }
+
+  updateHoursWorked = async(employeeId, hoursWorked) => {
+    const { accounts, contract } = this.state;
+    // function updateHoursWorked(uint _employee_id, uint _hours_worked) public {
+
+    await contract.methods.updateHoursWorked(employeeId, hoursWorked)
+  }
+
+  runPayroll = async() => {
     const { accounts, contract } = this.state;
 
-    await contract.methods.addEmployeeToPayroll;
+    await contract.methods.runPayroll()
   }
 
   render() {
@@ -88,6 +114,10 @@ class App extends Component {
           Try changing the value stored on <strong>line 40</strong> of App.js.
         </p>
         <div>Current Payroll number: {this.state.currentPayrollId}</div>
+
+        <div>
+          <button>Run Payroll</button>
+        </div>
       </div>
     );
   }
