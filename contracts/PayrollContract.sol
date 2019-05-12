@@ -1,4 +1,5 @@
 pragma solidity ^0.5.0;
+pragma experimental ABIEncoderV2;
 
 // import 'openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol';
 // import "openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
@@ -20,19 +21,28 @@ contract PayrollContract {
     uint256 hours_worked;
   }
 
-  Payroll[] currentPayroll;
+  Payroll[] public currentPayroll;
 
   mapping (uint => Employee) public employees;
   mapping (uint => Payroll[]) public payrolls;
   mapping (address => uint256) public balanceOf;
 
+  // todo: dont work
+  // function getCurrentPayroll (uint i) public returns(Payroll) {
+  //   return currentPayroll[i];
+  // }
+  
+
   function deposit() public payable {
-    // require > 0 
-    // require(msg.value == amount);
     balanceOf[msg.sender] += msg.value;
   }
 
-  function createEmployee(address payable _employee_address, uint _hourly_rate) public {
+  function currentPayrollCount () public returns(uint256) {
+    return currentPayroll.length;
+  }
+  
+
+  function createEmployee(address payable _employee_address, uint _hourly_rate) public returns(uint) {
     // we don't need to pass in employee_id as an argument to the mint function because of the line below:
     employee_id++;
 
@@ -46,6 +56,8 @@ contract PayrollContract {
     });
 
     employees[employee_id] = employee;
+
+    return employee_id;
   }
 
   function createNewPayroll() public returns(uint) {

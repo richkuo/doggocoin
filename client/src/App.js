@@ -46,27 +46,26 @@ class App extends Component {
   createPayroll = async () => {
     const { accounts, contract } = this.state;
 
-    var params = {
-      // gas: 40000,
-      from: accounts[0],
-      value: this.state.web3.utils.toWei('1', 'ether')
-      // value: 1
-    };
-
-    // await contract.methods.deposit().send(params);
+    // // initial deposit
+    // await contract.methods.deposit().send({
+    //   from: accounts[0],
+    //   value: this.state.web3.utils.toWei('1', 'ether')
+    // });
+    
+    // // check balance is kosher
+    // const res = await contract.methods.balanceOf(accounts[0]).call();
+    // const balance = this.state.web3.utils.fromWei(res._hex)
+    // console.log(`balance: ${balance}`)
+    
+    // // Create payrool,, check its lit 
     // const response = await contract.methods.createNewPayroll().call();
-    const res = await contract.methods.balanceOf(accounts[0]).call();
-    const balance = this.state.web3.utils.fromWei(res._hex)
-    console.log(balance)
-
-    // Get the value from the contract to prove it worked.
-    // console.log(response.toNumber());
-
-    // this.setState({ currentPayrollId: response.toNumber() });
-
+    // const payrollId = response.toNumber()
+    // console.log(`payrollId: ${payrollId}`)
+    
     this.createEmployee('0xf104cb0b57ee274838f43399f2ede8cc8e428560', 2)
-    this.addEmployeeToPayroll(1, 11)
-    this.addEmployeeToPayroll(1, 12)
+
+    // this.addEmployeeToPayroll(1, 11)
+    // this.addEmployeeToPayroll(1, 12)
   }
 
   createEmployee = async(employeeAddress, hourlyRate) => {
@@ -74,7 +73,14 @@ class App extends Component {
     // function createEmployee(address payable _employee_address, uint _hourly_rate) public {
 
     // await contract.methods.createEmployee('0xf104cb0b57ee274838f43399f2ede8cc8e428560', 2);
-    await contract.methods.createEmployee(employeeAddress, hourlyRate);
+    const res1 = await contract.methods.createEmployee(employeeAddress, hourlyRate).send({
+      from: accounts[0]
+    });
+    console.log(1)
+    
+    const res = await contract.methods.employees(1).call()
+    console.log(res)
+    
   }
 
   addEmployeeToPayroll = async(employeeId, hoursWorked) => {
